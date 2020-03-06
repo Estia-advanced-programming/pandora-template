@@ -1,17 +1,13 @@
 name: Import issues from Template
 
 on:
-  push:
-    branches:
-      - master
+  project:
+    created:
+
 jobs:
-  print:
-    runs-on: ubuntu-latest
-    steps:
-    - run: echo ${{ github.run_number }}
   copy-issues:
     #Prevent execution on template repository, only run once
-    if: startsWith( github.repository, 'Estia-advanced-programming' ) == false && github.run_number == '1'
+    if: github.run_number == '1'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -28,7 +24,7 @@ jobs:
       run: python git-mover.py -iml -dt $TOKEN $ACTOR $TOKEN $SOURCE $DESTINATION
   remove-setup:
     #Prevent execution on template repository, wait third commit
-    if: startsWith( github.repository, 'Estia-advanced-programming' ) == false && github.run_number == '3'
+    if: github.run_number == '1'
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
