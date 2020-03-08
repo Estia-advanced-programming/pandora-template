@@ -18,11 +18,11 @@ public class Option {
 	private int takeArgument = NO_ARGUMENT ;
 		
 	/** Option take no argument */
-	final static int NO_ARGUMENT = LongOpt.NO_ARGUMENT ; 
+	public final static int NO_ARGUMENT = LongOpt.NO_ARGUMENT ; 
 	/** Option may take an argument, it must not be separated from the options ex. -sSummary.txt not -s Summary.txt*/
-	final static int REQUIRED_ARGUMENT = LongOpt.REQUIRED_ARGUMENT ; 
+	public final static int REQUIRED_ARGUMENT = LongOpt.REQUIRED_ARGUMENT ; 
 	/** Option must take an argument */
-	final static int OPTIONAL_ARGUMENT  = LongOpt.OPTIONAL_ARGUMENT ; 
+	public final static int OPTIONAL_ARGUMENT  = LongOpt.OPTIONAL_ARGUMENT ; 
 	
 	
 	/**
@@ -32,7 +32,7 @@ public class Option {
 	 * @param takeArgument has (an optional) argument. Values are NO_ARGUMENT, REQUIRED_ARGUMENT, OPTIONAL_ARGUMENT
 	 * @param longName	   long version 
 	 */
-	Option( char code, String description, int takeArgument, String longName  ) {
+	public Option( char code, String description, int takeArgument, String longName  ) {
 		this.description = description ;
 		this.takeArgument = takeArgument ;
 		switch( takeArgument ) {

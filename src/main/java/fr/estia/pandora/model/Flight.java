@@ -3,6 +3,10 @@ package fr.estia.pandora.model;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * @author <@dhmmasson> 
+ *
+ */
 public class Flight {
 
 	private List<Record> records;
@@ -35,7 +39,5 @@ public class Flight {
 	public Metadata getMetadata() {
 		return metadata ; 
 	}
-	
-
 	
 }

@@ -28,6 +28,6 @@ public class OptionException extends Exception {
 	 */
 	@Override
 	public String getMessage() {
-		return "Invalid Options: " + this.invalidOption ; 
+		return "ERROR: Invalid Options " + this.invalidOption ; 
 	}
 }

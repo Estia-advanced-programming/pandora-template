@@ -10,9 +10,6 @@ public class FeaturePrinter {
 		FeaturePrinter.targetFeature = targetFeature ;
 	}
 	public static void print( Flight flight, Analysis analysis ) {
-		System.out.print( flight.getMetadata().getFlightId()  );
-		System.out.print( " " ) ; 
 		System.out.println( analysis.getFeatureValue( targetFeature ) );
-		System.out.println( "" ) ; 
 	}
 }

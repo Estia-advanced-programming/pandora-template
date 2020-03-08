@@ -18,6 +18,7 @@ public class FileReader {
 
 	private final Path testFolderRoot ;
 	private Scanner source;
+	private Path sourcePath ; 
 	private Flight flight ;
 
 	private boolean metadataParsed = false ;
@@ -38,11 +39,11 @@ public class FileReader {
 	
 	private void openFlightRecordFile( String fileName ) throws FlightRecordException {		
 		try {
-			Path path = testFolderRoot.resolve( Paths.get( fileName )).toAbsolutePath().normalize() ;
-			File flightRecordFile = new File(path.toString()); 
+			sourcePath = testFolderRoot.resolve( Paths.get( fileName )).toAbsolutePath().normalize() ;
+			File flightRecordFile = new File(sourcePath.toString()); 
 			source = new Scanner(flightRecordFile);			
 		} catch (FileNotFoundException e) { //Catch missing files
-			throw new FlightRecordException( fileName + " not found" ) ; 
+			throw new FlightRecordException( sourcePath.toString() + " not found" ) ; 
 		} 	
 	}
 	
@@ -54,7 +55,7 @@ public class FileReader {
 		String line ; 
 		//use scanner only if the metadata have not yet been used 
 		if( !metadataParsed ) {
-			if( !readyToParse() ) throw new MetadataException( "No Metadata to parse") ;
+			if( !readyToParse() ) throw new MetadataException( sourcePath.toString() ) ;
 			while ( readyToParse() && !isEmptyLine(line = source.nextLine()) ) {
 				flight.parseMetaData( line ) ; 
 			}
@@ -71,7 +72,7 @@ public class FileReader {
 		if( metadataParsed ) {
 			String header, recordLine  ; 
 			if( !readyToParse() || isEmptyLine( header = source.nextLine() ) ) 
-				throw new HeaderException( "Missing Header" )  ;
+				throw new HeaderException( sourcePath.toString() )  ;
 
 			RecordParser parser ; 
 			//Java 7 feature : switch on String 

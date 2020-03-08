@@ -4,8 +4,9 @@ public class HeaderException extends FlightRecordException {
 	/** An id for serialization purpose */
 	private static final long serialVersionUID = -3886159525507073605L;
 	String message ; 
-	public HeaderException(String message) {
-		this.message = message ; 
+	public HeaderException( String filename) {
+		super( filename ) ; 
+		this.message = "Missing Header" ; 
 	}
 	
 	@Override

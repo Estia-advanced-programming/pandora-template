@@ -24,19 +24,43 @@ import gnu.getopt.LongOpt;
  *
  */
 public class CLI {
-	private static String appName = "Pandora" ;
+	/** Default values if initialize is not called  */
+	private static String appName = "pandora" ;
 	private static int VERSION_MAJOR = 1;
 	private static int VERSION_MINOR = 0;
 	private static int VERSION_DELTA = 0;
-
-	private static Configuration configuration ; 
 	
-	final static Option options[] = { 
-			new Option( 'f', "Feature - Print only this specific feature at the end", Option.REQUIRED_ARGUMENT , "feature") ,
+	/** Default of possible options for the command line, see Options class for more details */
+	static Option options[] = { 
+			new Option( 'o', "output - Print only the specified feature at the end", Option.REQUIRED_ARGUMENT , "output") ,
 			new Option( 'h', "Help - print this help message" , "help") ,
 			new Option( 'v', "Version - print the version of the application ", "version") 
 	} ;
+	/** Resulting configuration */
+	private static Configuration configuration ; 
+	
+	// 
+	/**
+	 * Modify CLI information 
+	 * @param name app name, should stay pandora if you want to validate test 
+	 * @param major ( google SemVer )
+	 * @param minor ( google SemVer )
+	 * @param delta ( google SemVer )
+	 * @param options [Optional] set of possible options  
+	 */
+	public static void initialize(String name, int major, int minor, int delta, Option options[] ) {
+		appName = name ; 
+		VERSION_MAJOR = major ; 
+		VERSION_MINOR = minor ; 
+		VERSION_DELTA = delta ; 
+		//Update only if 
+		if( options != null )  CLI.options = options ;   
+	}
 
+	public static void initialize(String name, int major, int minor, int delta ) {
+		 initialize( name,  major,  minor,  delta, null ) ; 
+	}
+	
 	/**
 	 * Read arguments provided on the command line, parse them and produce a neat Config (@see fr.estia.model.Config ) object for the rest of the apllicaiton
 	 * @param arguments Arguments from the command line
@@ -149,17 +173,6 @@ public class CLI {
 	private static Getopt createOpt( String arguments[] ) {			
 		return new Getopt( appName, arguments, getShortOptions(), getLongOptions() ) ; 
 	}
-
-
-
-
-	public static void configure(String name, int major, int minor, int delta) {
-		appName = name ; 
-		VERSION_MAJOR = major ; 
-		VERSION_MINOR = minor ; 
-		VERSION_DELTA = delta ; 
-	}
-
 
 	public static Configuration getConfiguration() {
 		return CLI.configuration ;
