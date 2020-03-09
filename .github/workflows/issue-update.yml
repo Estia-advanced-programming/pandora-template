@@ -1,0 +1,17 @@
+name: Import issues from Template
+
+on:
+  project:
+    created:
+  schedule:
+    # run a 8:00 12:00 and 18:00 every day in march 
+    - cron:  '0 8,12,18 * 3 *'
+
+jobs:
+  copy:
+    name: Copy Issues
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Estia-advanced-programming/pandora-public/issueGenerator@alpha
+        with:
+          destination-repo: ${{ github.repository }}
