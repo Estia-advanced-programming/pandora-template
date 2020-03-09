@@ -1,4 +1,4 @@
-name: GitHub Classroom Workflow
+name: Milestone Assessement
 on: [push]
 env:
   TEST_SUITES_URL: https://github.com/Estia-advanced-programming/pandora-public/raw/master/testSuites
@@ -58,7 +58,7 @@ jobs:
         id: milestone
         with:
           title: milestone${{ matrix.milestone}}
-          testSuite: './testSuite/autograding.json'
+          testSuite: './testSuite/milestone${{ matrix.milestone}}.json'
 
       - name: update report
         if: failure()
@@ -108,8 +108,8 @@ jobs:
         with:
           script: |
             github.checks.update({
-              context.repo.owner,
-              context.repo.repo,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
               check_run_id: ${{github.run_id}},
               output: {
                 title: "Autograding",
