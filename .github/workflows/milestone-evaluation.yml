@@ -48,7 +48,7 @@ jobs:
 
       - name: download test suite
         run: |
-          wget $TEST_SUITES_URL/milestone${{ matrix.milestone }}.zip -O testSuite.zip
+          wget $TEST_SUITES_URL/milestones.zip -O testSuite.zip
           unzip testSuite.zip -d testSuite
 
       - name: create report directory
