@@ -1,7 +1,7 @@
 name: Milestone Assessement
 on: [push]
 env:
-  TEST_SUITES_URL: https://github.com/Estia-advanced-programming/pandora-public/raw/master/testSuites
+  TEST_SUITES_URL: https://github.com/Estia-advanced-programming/pandora-public/releases/download/beta/
   PANDORA_REF_URL: https://github.com/Estia-advanced-programming/pandora-public/releases/download/beta/pandora.jar
 
 jobs:
