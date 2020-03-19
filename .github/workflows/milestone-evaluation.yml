@@ -24,19 +24,7 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
       - run: mkdir -p staging/lib && cp target/*.jar staging  && cp target/lib/*.jar staging/lib
-      - uses: actions/upload-artifact@v1
-        with:
-          name: target
-          path: staging
-  milestones:
-    name:  ${{ format( 'milestone{0}', matrix.milestone ) }}
-    needs: maven_build
-    runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        milestone: [ 1, 2, 3, 4, 5, 6, 7, 8 ]
-    steps:
+
       - uses: actions/checkout@v2
       - name: Setup student pandora.jar
         uses: actions/download-artifact@v1
@@ -54,56 +42,90 @@ jobs:
       - name: create report directory
         run: mkdir -p report
 
-      - uses: Estia-advanced-programming/autograding@estia
-        id: milestone
+      - uses: Estia-advanced-programming/autograding@estia-v2
+        id: milestone1
         with:
-          title: milestone${{ matrix.milestone}}
-          testSuite: './testSuite/milestone${{ matrix.milestone}}.json'
-
+          title: milestones
+          testSuite: './testSuite/milestone1.json'
       - name: update report
         if: failure()
-        run: echo ${{ format( 'milestone{0}', matrix.milestone ) }} 0/0 >> report/report.txt
+        run: echo milestone1 0/0 >> report.txt
       - name: update report
         if: success()
-        run: echo ${{ format( 'milestone{0}', matrix.milestone ) }} ${{ steps.milestone.outputs.Points }} >> report/report.txt
-      - name: upload report
-        if: always()
-        uses: actions/upload-artifact@v1
-        with:
-          name: report-milestone${{matrix.milestone}}
-          path: report
+        run: echo milestone1 ${{ steps.milestone1.outputs.Points }} >> report.txt
 
-  Autograding:
-    name: Autograding
-    needs: milestones
-    if: always()
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/download-artifact@v1
+      - uses: Estia-advanced-programming/autograding@estia-v2
+        id: milestone2
         with:
-          name: report-milestone1
-      - uses: actions/download-artifact@v1
+          title: milestones
+          testSuite: './testSuite/milestone2.json'
+      - name: update report
+        if: failure()
+        run: echo milestone2 0/0 >> report.txt
+      - name: update report
+        if: success()
+        run: echo milestone2 ${{ steps.milestone2.outputs.Points }} >> report.txt
+
+      - uses: Estia-advanced-programming/autograding@estia-v2
+        id: milestone3
         with:
-          name: report-milestone2
-      - uses: actions/download-artifact@v1
+          title: milestones
+          testSuite: './testSuite/milestone3.json'
+      - name: update report
+        if: failure()
+        run: echo milestone3 0/0 >> report.txt
+      - name: update report
+        if: success()
+        run: echo milestone3 ${{ steps.milestone2.outputs.Points }} >> report.txt
+
+      - uses: Estia-advanced-programming/autograding@estia-v2
+        id: milestone5
         with:
-          name: report-milestone3
-      - uses: actions/download-artifact@v1
+          title: milestones
+          testSuite: './testSuite/milestone5.json'
+      - name: update report
+        if: failure()
+        run: echo milestone5 0/0 >> report.txt
+      - name: update report
+        if: success()
+        run: echo milestone5 ${{ steps.milestone2.outputs.Points }} >> report.txt
+
+      - uses: Estia-advanced-programming/autograding@estia-v2
+        id: milestone6
         with:
-          name: report-milestone4
-      - uses: actions/download-artifact@v1
+          title: milestones
+          testSuite: './testSuite/milestone6.json'
+      - name: update report
+        if: failure()
+        run: echo milestone6 0/0 >> report.txt
+      - name: update report
+        if: success()
+        run: echo milestone6 ${{ steps.milestone2.outputs.Points }} >> report.txt
+
+      - uses: Estia-advanced-programming/autograding@estia-v2
+        id: milestone7
         with:
-          name: report-milestone5
-      - uses: actions/download-artifact@v1
+          title: milestones
+          testSuite: './testSuite/milestone7.json'
+      - name: update report
+        if: failure()
+        run: echo milestone7 0/0 >> report.txt
+      - name: update report
+        if: success()
+        run: echo milestone7 ${{ steps.milestone2.outputs.Points }} >> report.txt
+
+      - uses: Estia-advanced-programming/autograding@estia-v2
+        id: milestone8
         with:
-          name: report-milestone6
-      - uses: actions/download-artifact@v1
-        with:
-          name: report-milestone7
-      - uses: actions/download-artifact@v1
-        with:
-          name: report-milestone8
-      - run: cat report-milestone*/report.txt > finalReport
+          title: milestones
+          testSuite: './testSuite/milestone8.json'
+      - name: update report
+        if: failure()
+        run: echo milestone8 0/0 >> report.txt
+      - name: update report
+        if: success()
+        run: echo milestone8 ${{ steps.milestone2.outputs.Points }} >> report.txt
+
       - uses: actions/github-script@0.8.0
         with:
           script: |
