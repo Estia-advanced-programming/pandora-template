@@ -1,8 +1,11 @@
 name: Milestone Assessement
-on: [push]
+on:
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 env:
   TEST_SUITES_URL: https://github.com/Estia-advanced-programming/pandora-public/releases/download/beta/
-  PANDORA_REF_URL: https://github.com/Estia-advanced-programming/pandora-public/releases/download/beta/pandora.jar
 
 jobs:
   maven_build:
@@ -23,128 +26,29 @@ jobs:
           restore-keys: ${{ runner.os }}-m2
       - name: Build with Maven
         run: mvn -B package --file pom.xml
+
       - run: mkdir -p staging/lib && cp target/*.jar staging  && cp target/lib/*.jar staging/lib
-
-      - uses: actions/checkout@v2
-      - name: Setup student pandora.jar
-        uses: actions/download-artifact@v1
-        with:
-          name: target
-
-      - name: Downloading reference pandora
-        run:  wget $PANDORA_REF_URL -O target/referencePandora.jar
 
       - name: download test suite
         run: |
-          wget $TEST_SUITES_URL/milestones.zip -O testSuite.zip
-          unzip testSuite.zip -d testSuite
+          wget $TEST_SUITES_URL/autograder.zip -O autograder.zip
+          unzip autograder.zip -d autograder
 
-      - name: create report directory
-        run: mkdir -p report
+      - uses: actions/setup-node@v2
 
-      - uses: Estia-advanced-programming/autograding@estia-v2
-        id: milestone1
-        with:
-          title: milestones
-          testSuite: './testSuite/milestone1.json'
+      - name: create Output directory
+        run: mkdir results
+
+      - name: run test
+        run: node autograder/execute.mjs 1 2 3 -f 4 staging/pandora.jar
+
       - name: update report
         if: failure()
-        run: echo milestone1 0/0 >> report.txt
-      - name: update report
-        if: success()
-        run: echo milestone1 ${{ steps.milestone1.outputs.Points }} >> report.txt
+        run: echo error
 
-      - uses: Estia-advanced-programming/autograding@estia-v2
-        id: milestone2
-        with:
-          title: milestones
-          testSuite: './testSuite/milestone2.json'
       - name: update report
-        if: failure()
-        run: echo milestone2 0/0 >> report.txt
-      - name: update report
+        uses: actions/upload-artifact@v2
         if: success()
-        run: echo milestone2 ${{ steps.milestone2.outputs.Points }} >> report.txt
-
-      - uses: Estia-advanced-programming/autograding@estia-v2
-        id: milestone3
         with:
-          title: milestones
-          testSuite: './testSuite/milestone3.json'
-      - name: update report
-        if: failure()
-        run: echo milestone3 0/0 >> report.txt
-      - name: update report
-        if: success()
-        run: echo milestone3 ${{ steps.milestone2.outputs.Points }} >> report.txt
-
-      - uses: Estia-advanced-programming/autograding@estia-v2
-        id: milestone5
-        with:
-          title: milestones
-          testSuite: './testSuite/milestone5.json'
-      - name: update report
-        if: failure()
-        run: echo milestone5 0/0 >> report.txt
-      - name: update report
-        if: success()
-        run: echo milestone5 ${{ steps.milestone2.outputs.Points }} >> report.txt
-
-      - uses: Estia-advanced-programming/autograding@estia-v2
-        id: milestone6
-        with:
-          title: milestones
-          testSuite: './testSuite/milestone6.json'
-      - name: update report
-        if: failure()
-        run: echo milestone6 0/0 >> report.txt
-      - name: update report
-        if: success()
-        run: echo milestone6 ${{ steps.milestone2.outputs.Points }} >> report.txt
-
-      - uses: Estia-advanced-programming/autograding@estia-v2
-        id: milestone7
-        with:
-          title: milestones
-          testSuite: './testSuite/milestone7.json'
-      - name: update report
-        if: failure()
-        run: echo milestone7 0/0 >> report.txt
-      - name: update report
-        if: success()
-        run: echo milestone7 ${{ steps.milestone2.outputs.Points }} >> report.txt
-
-      - uses: Estia-advanced-programming/autograding@estia-v2
-        id: milestone8
-        with:
-          title: milestones
-          testSuite: './testSuite/milestone8.json'
-      - name: update report
-        if: failure()
-        run: echo milestone8 0/0 >> report.txt
-      - name: update report
-        if: success()
-        run: echo milestone8 ${{ steps.milestone2.outputs.Points }} >> report.txt
-
-      - uses: actions/github-script@0.8.0
-        with:
-          script: |
-            github.checks.update({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              check_run_id: ${{github.run_id}},
-              output: {
-                title: "Autograding",
-                summary: "20/20",
-                text: "20/20",
-                annotations: [
-                  {
-                    path: '.github',
-                    start_line: 1,
-                    end_line: 1,
-                    annotation_level: 'notice',
-                    message: "20/20",
-                    title: 'Autograding complete',
-                  },
-                ],
-              }})
+          name: score-report
+          path: results/
