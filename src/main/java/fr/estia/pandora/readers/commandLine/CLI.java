@@ -77,8 +77,8 @@ public class CLI {
 		configuration = new Configuration() ; 
 
 		while ((code = g.getopt()) != -1) {
-			switch (code) {			
-			case 'f': //Feature 
+			switch (code) {
+			case 'o': //Feature 
 				configuration.setFeature( g.getOptarg() ) ;
 				break;
 			case 'v': 
