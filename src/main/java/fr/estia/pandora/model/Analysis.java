@@ -55,7 +55,7 @@ public class Analysis {
 		//Store for further computation where flight duration in second might be useful
 		this.flightDuration = flightDuration;
 		//TODO: change to store with the correct format HH:mm:ss
-		this.featureValues.put( "flightDuration", String.valueOf( flightDuration ) ) ;
+		this.featureValues.put( "flightDuration", String.format("%.2f", flightDuration ) ) ;
 	}
 
 	/**
